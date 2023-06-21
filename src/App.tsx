@@ -167,7 +167,7 @@ function App() {
                 </div>}
             </div>
             {!file && <Heatmap xAxis={selectedX} yAxis={selectedY} metric={selectedM} data={fetchedData}/>}
-            {file && sankeyData && sankeyLinks && sankeySelectedOption && sankeySelectedNumericOption &&
+            {file && sankeyData && sankeyLinks && sankeySelectedOption.length >= 2 && sankeySelectedNumericOption &&
                 <Sankeymap data={sankeyData} links={sankeyLinks}/>}
         </div>
     );
