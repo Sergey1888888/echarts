@@ -1,6 +1,6 @@
 import styles from "../styles/styles.module.css"
 import {SelectProps} from "../props/SelectProps";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState, useMemo} from "react";
 import {ReactComponent as ArrowDown} from "../../../assets/down-arrow.svg";
 import {Option} from "./Option";
 
@@ -40,6 +40,17 @@ export const Select = ({selected, onChange, label, options, placeholder, onClose
         }
     }, []);
 
+    const displaySelected = useMemo(() => {
+        if (selected) {
+            if (multiple) {
+                return selected.length > 0 ? selected.join(', ') : placeholder;
+            } else {
+                return selected;
+            }
+        }
+        return placeholder;
+    }, [selected, multiple, placeholder]);
+
     return (
         <div>
             {label && <div className={styles.label}>{label}</div>}
@@ -50,14 +61,14 @@ export const Select = ({selected, onChange, label, options, placeholder, onClose
             >
                 <div
                     className={styles.placeholder}
-                    data-selected={!!selected}
+                    data-selected={typeof selected === 'object' && selected ? selected.length > 0 : !!selected}
                     role='button'
                     onClick={onSelectClick}
                 >
                     <div className={styles.arrow}>
                         <ArrowDown/>
                     </div>
-                    {selected ? multiple ? selected.join(', ') : selected : placeholder}
+                    {displaySelected}
                 </div>
                 {showOptions && (
                     <ul className={styles.options}>

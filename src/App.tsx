@@ -70,6 +70,8 @@ function App() {
                 setExcelData(excelData);
                 setSankeyOptions(sankeyOptions);
                 setSankeyNumericOptions(sankeyNumericOptions);
+                setSankeySelectedOption([]);
+                setSankeySelectedNumericOption(null);
             };
             reader.readAsArrayBuffer(e.target.files[0]);
         }
@@ -77,6 +79,13 @@ function App() {
 
     const onCloseFile = () => {
         setFile(null);
+        setExcelData(null);
+        setSankeyOptions(null);
+        setSankeyNumericOptions(null);
+        setSankeySelectedOption([]);
+        setSankeySelectedNumericOption(null);
+        setSankeyLinks(null);
+        setSankeyData(null);
     };
 
     const onInputClick = (event: MouseEvent<HTMLInputElement>) => {
@@ -103,7 +112,7 @@ function App() {
                         const profit = excelData.filter(data => data[sourceKey] === source && data[targetKey] === target)
                             .reduce((result, current) => result += current[sankeySelectedNumericOption], 0);
                         if (profit > 0) {
-                            links.push({source, target, value: Number(profit.toFixed(2))});
+                            links.push({source, target, value: profit});
                         }
                     }
                 }
@@ -138,7 +147,7 @@ function App() {
                 <Select label='Metric' selected={selectedM} options={productNumericKeys as unknown as string[]}
                         placeholder='Выберите' onChange={onSelectM}/>
                 <label htmlFor="upload">
-                    3 задание
+                    <div>3 задание</div>
                     <input
                         type="file"
                         name="upload"
@@ -158,7 +167,8 @@ function App() {
                 </div>}
             </div>
             {!file && <Heatmap xAxis={selectedX} yAxis={selectedY} metric={selectedM} data={fetchedData}/>}
-            {file && sankeyData && sankeyLinks && <Sankeymap data={sankeyData} links={sankeyLinks}/>}
+            {file && sankeyData && sankeyLinks && sankeySelectedOption && sankeySelectedNumericOption &&
+                <Sankeymap data={sankeyData} links={sankeyLinks}/>}
         </div>
     );
 }

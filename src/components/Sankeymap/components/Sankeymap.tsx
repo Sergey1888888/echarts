@@ -10,7 +10,9 @@ export const Sankeymap = ({data, links}: SankeymapProps) => {
             const options: EChartOption = {
                 tooltip: {
                     trigger: 'item',
-                    triggerOn: 'mousemove'
+                    triggerOn: 'mousemove',
+                    //@ts-ignore
+                    valueFormatter: (value) => Number(value.toFixed(2)),
                 },
                 series: {
                     //@ts-ignore
