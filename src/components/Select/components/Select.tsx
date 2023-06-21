@@ -4,7 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import {ReactComponent as ArrowDown} from "../../../assets/down-arrow.svg";
 import {Option} from "./Option";
 
-export const Select = ({selected, onChange, label, options, placeholder, onClose}: SelectProps<any>) => {
+export const Select = ({selected, onChange, label, options, placeholder, onClose, multiple}: SelectProps<any>) => {
     const rootRef = useRef<HTMLDivElement>(null);
     const [showOptions, setShowOptions] = useState<boolean>(false);
 
@@ -17,7 +17,10 @@ export const Select = ({selected, onChange, label, options, placeholder, onClose
     }
 
     const onOptionClick = (option: string) => {
-        setShowOptions(false);
+        if (!multiple) {
+            setShowOptions(false);
+            onChange?.(option);
+        }
         onChange?.(option);
     };
 
@@ -54,7 +57,7 @@ export const Select = ({selected, onChange, label, options, placeholder, onClose
                     <div className={styles.arrow}>
                         <ArrowDown/>
                     </div>
-                    {selected ?? placeholder}
+                    {selected ? multiple ? selected.join(', ') : selected : placeholder}
                 </div>
                 {showOptions && (
                     <ul className={styles.options}>
